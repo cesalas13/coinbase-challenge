@@ -1,4 +1,4 @@
-"""Generate challenge exercise answers using the local skill and market data."""
+"""Generate institutional strategy brief sections using the local skill and market data."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def _claude_generate(task: str, max_words: int, extra_context: str = "") -> str 
     client = _anthropic_client()
     if client is None:
         return None
-    prompt = f"""Use the skill and context below to answer the Coinbase Institutional Client Strategy Challenge task.
+    prompt = f"""Use the skill and context below to draft an institutional crypto strategy brief section.
 
 Hard limit: {max_words} words. Be commercially direct, specific, and candid. Do not include a heading unless requested.
 
@@ -73,7 +73,7 @@ _FALLBACK_NOTICE = (
 
 def generate_exercise_1() -> str:
     generated = _claude_generate(
-        "Exercise 1: Decision framework for a large cash-and-carry via Coinbase Prime versus an ETF-plus-CME-futures implementation. Use the SKILL framework. Structure: Coinbase advantages, Coinbase disadvantages, conversation positioning.",
+        "Section 1: Decision framework for a large cash-and-carry via Coinbase Prime versus an ETF-plus-CME-futures implementation. Use the SKILL framework. Structure: Coinbase advantages, Coinbase disadvantages, conversation positioning.",
         350,
         load_positioning(),
     )
@@ -84,7 +84,7 @@ def generate_exercise_1() -> str:
 
 def generate_exercise_2() -> str:
     generated = _claude_generate(
-        "Exercise 2: Prioritize the four client demands listed in the challenge brief (see SKILL.md). Use deal size times probability, strategic vs tactical, time sensitivity, and delegation. Show reasoning.",
+        "Section 2: Prioritize the four client or product demands listed in SKILL.md. Use deal size times probability, strategic vs tactical, time sensitivity, and delegation. Show reasoning.",
         250,
         load_positioning(),
     )
@@ -95,7 +95,7 @@ def generate_exercise_2() -> str:
 
 def generate_exercise_3() -> str:
     generated = _claude_generate(
-        "Exercise 3: Five discovery questions, each with brief rationale. Focus on strategic intent, constraints, sizing, infrastructure, and market view.",
+        "Section 3: Five discovery questions, each with brief rationale. Focus on strategic intent, constraints, sizing, infrastructure, and market view.",
         150,
         load_positioning(),
     )
@@ -108,14 +108,14 @@ def generate_exercise_4(snapshot: MarketSnapshot | None = None) -> str:
     snapshot = snapshot or latest_snapshot()
     context = format_market_summary(snapshot) if snapshot else "No market snapshot available."
     generated = _claude_generate(
-        "Exercise 4: Market context in 3-5 bullets. Use format '[Data point]: [Implication for basis trade]'.",
+        "Section 4: Market context in 3-5 bullets. Use format '[Data point]: [Implication for basis trade]'.",
         250,
         context,
     )
     if generated:
         return _trim_to_words(generated, 250)
     if not snapshot:
-        return "- Current market data unavailable: rerun market_data_agent before final submission."
+        return "- Current market data unavailable: rerun market_data_agent before finalizing the brief."
 
     def money(value: float | None) -> str:
         return "unavailable" if value is None else f"${value:,.0f}"
@@ -144,8 +144,8 @@ def generate_exercise_4(snapshot: MarketSnapshot | None = None) -> str:
 
 def generate_all(snapshot: MarketSnapshot | None = None) -> dict[str, str]:
     return {
-        "Exercise 1": generate_exercise_1(),
-        "Exercise 2": generate_exercise_2(),
-        "Exercise 3": generate_exercise_3(),
-        "Exercise 4": generate_exercise_4(snapshot),
+        "Section 1: Basis Trade Execution Route": generate_exercise_1(),
+        "Section 2: Client Prioritization": generate_exercise_2(),
+        "Section 3: Discovery Questions": generate_exercise_3(),
+        "Section 4: Market Context": generate_exercise_4(snapshot),
     }

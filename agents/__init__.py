@@ -1,1 +1,1 @@
-"""Agent modules for the Coinbase Institutional Client Strategy Challenge."""
+"""Agent modules for institutional crypto strategy research briefs."""

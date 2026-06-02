@@ -1,57 +1,91 @@
-# Coinbase Institutional Client Strategy Challenge: Agent Pipeline
+# Institutional Crypto Strategy Research Pipeline
 
-A small multi-agent pipeline that produces a draft submission for the Coinbase Institutional Client Strategy Challenge, end to end:
+A small multi-agent research pipeline for producing institutional digital-asset strategy briefs.
 
+The workflow is built around a practical analyst use case: collect a market snapshot, research an institutional positioning question, draft a concise memo, and run an independent QA pass before a human edits the final recommendation.
+
+```text
+market snapshot agent -> positioning research agent -> strategy memo generator -> QA reviewer
+        |                         |                         |                    |
+ BTC spot / basis / IV      cited institutional        concise draft       word counts,
+ OI / funding snapshot      positioning memo           recommendation      scoring, edits
+ sqlite persistence         source-backed notes        markdown output     review flags
 ```
-market-data agent  →  research agent  →  answer generator  →  QA agent  →  draft submission
-       ↓                    ↓                   ↓                ↓
-   BTC spot / futures /  Coinbase Prime    answers under     scores 1-10
-   basis / IV / perp     positioning       hard word caps    on grading
-   funding snapshot      memo with         (350 / 250 /      criteria,
-   (sqlite-persisted)    cited sources     150 / 250)        flags edits
-```
 
-Each agent is a separate Python module with a single responsibility. The output is a Google-Doc-ready markdown draft with an AI disclosure footer and a market data source note. The pipeline is meant to be human-in-the-loop: the agents drive the boring infrastructure (snapshotting, drafting, scoring, formatting) so the operator's time goes to judgment and editing.
+This is not a trading bot and it does not make investment decisions. It is research infrastructure: the agents handle the repetitive work of snapshotting, drafting, formatting, and review so the operator can focus on judgment.
 
-## Why this exists
+## Why This Is Useful
 
-The challenge is a structured commercial-judgment exercise: four exercises on Bitcoin basis-trade strategy, Coinbase Prime positioning, and institutional client prioritization. The deliverable is a tight written submission under a 1,000-word total cap.
+Someone trying to break into crypto markets, hedge fund research, fintech strategy, or institutional sales needs to show more than opinions. They need a repeatable way to turn market data and source research into a clear written view.
 
-Doing this without infrastructure looks like: tab through ten broker reports, copy-paste rates from three exchanges, write four answers by hand, count words manually, edit five times. Doing it with agents looks like: one `python3 main.py`, get a snapshot + draft + QA report, then spend the rest of the time on the edits that actually move the score.
+This repo demonstrates that workflow in a concrete way:
+
+- Pull market data instead of hand-copying numbers from tabs.
+- Store snapshots so a memo can be traced back to the data available at run time.
+- Separate research, drafting, and QA into different agents with clear responsibilities.
+- Enforce writing constraints before the human edit pass.
+- Keep AI output human-in-the-loop, cited, and reviewable.
+
+Example use cases:
+
+- BTC basis-trade briefing for a hedge fund analyst.
+- Digital-asset market note for a consultant or research associate.
+- Institutional client prep for a crypto prime brokerage or fintech sales team.
+- Investment committee first draft that needs fast data, tight structure, and clear caveats.
+- Portfolio project for someone learning how market research workflows can use agents responsibly.
+
+## Origin
+
+The first version was built around an institutional client strategy exercise involving Bitcoin basis, Coinbase Prime positioning, and client prioritization. The public repo frames that work as reusable research infrastructure rather than a one-off answer.
+
+Coinbase, Deribit, Binance, Yahoo Finance, and public web research are used as example sources. The same architecture can be adapted to other markets, instruments, or strategy questions.
 
 ## Architecture
 
-```
+```text
 coinbase-challenge/
 ├── agents/
-│   ├── market_data_agent.py        ← pulls BTC spot, futures basis, IV, OI, funding
-│   ├── coinbase_research_agent.py  ← Anthropic SDK + web search → positioning memo
-│   ├── answer_generator.py         ← four answers under hard word caps
-│   └── qa_agent.py                 ← scores draft 1-10 across six grading axes
+│   ├── market_data_agent.py        # BTC spot, futures basis, IV, OI, funding
+│   ├── coinbase_research_agent.py  # institutional positioning research
+│   ├── answer_generator.py         # concise strategy memo sections
+│   └── qa_agent.py                 # word counts, scoring, review flags
 ├── research/
-│   └── coinbase_positioning.md     ← Prime positioning notes (cited sources)
+│   └── coinbase_positioning.md     # cited positioning notes
 ├── skills/
 │   └── coinbase-basis-challenge/
-│       └── SKILL.md                ← the Claude skill that scopes the work
-├── data/                           ← runtime sqlite snapshots (gitignored)
-├── output/                         ← generated drafts (gitignored)
-├── examples/                       ← redacted example outputs
-├── main.py                         ← orchestrator
+│       └── SKILL.md                # workflow scope and role instructions
+├── data/                           # runtime sqlite snapshots, gitignored
+├── output/                         # generated drafts, gitignored
+├── examples/                       # redacted example outputs
+├── main.py                         # orchestrator
 ├── config.py
 ├── requirements.txt
 └── .env.example
 ```
 
-## How the agents coordinate
+## Agent Roles
 
 | Agent | Owns | Output |
 |---|---|---|
 | `market_data_agent` | BTC spot, futures basis, implied vol, CME open interest, perp funding | sqlite snapshot + bullet summary |
-| `coinbase_research_agent` | Coinbase Prime positioning research using Claude web search | markdown memo with citations |
-| `answer_generator` | Four exercise answers, each under its word cap | markdown sections |
-| `qa_agent` | Word counts, scores against six grading criteria, flags edits | QA report appended to draft |
+| `coinbase_research_agent` | Institutional positioning research using Claude web search | markdown memo with citations |
+| `answer_generator` | Concise strategy sections under word caps | markdown draft |
+| `qa_agent` | Word counts, scoring criteria, missing caveats, edit flags | QA report appended to the draft |
 
-The orchestrator runs them in order, then assembles the final submission with an AI disclosure footer.
+The orchestrator runs the agents in sequence and assembles a Google-Doc-ready markdown draft with a source note and AI disclosure.
+
+## What A Beginner Can Learn From This
+
+This repo is useful as a field-entry project because it shows the work behind a credible research memo:
+
+- how to structure a market data snapshot
+- how to keep generated analysis tied to reproducible inputs
+- how to separate data collection from judgment
+- how to use agents as reviewers, not just writers
+- how to make AI-assisted work transparent with disclosure and source notes
+- how to design a workflow that degrades gracefully when external data is unavailable
+
+The goal is not to claim production-grade research coverage. The goal is to show a practical pattern that a junior analyst, consultant, or operator could build on.
 
 ## Setup
 
@@ -67,7 +101,7 @@ cp .env.example .env
 Add your Anthropic key to `.env`:
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...
+export ANTHROPIC_API_KEY=<your_anthropic_api_key>
 export ANTHROPIC_MODEL=claude-sonnet-4-20250514
 ```
 
@@ -81,59 +115,70 @@ Run the full pipeline:
 python3 main.py
 ```
 
-Outputs (gitignored):
+Outputs, which are gitignored:
 
 - `data/market_data.db`: persisted market snapshots, one row per run.
-- `research/coinbase_positioning.md`: Coinbase Prime positioning research.
-- `output/coinbase_challenge_submission.md`: Google-Doc-ready draft + QA report + AI disclosure.
+- `research/coinbase_positioning.md`: institutional positioning research.
+- `output/institutional_crypto_strategy_brief.md`: Google-Doc-ready draft + QA report + AI disclosure.
 
 Run individual agents:
 
 ```bash
 python3 agents/market_data_agent.py
 python3 agents/coinbase_research_agent.py
-python3 agents/qa_agent.py < output/coinbase_challenge_submission.md
+python3 agents/qa_agent.py < output/institutional_crypto_strategy_brief.md
 ```
 
-## Data sources
+## Data Sources
 
-| Field | Source |
+| Field | Example source |
 |---|---|
 | BTC spot | Coinbase Exchange REST API |
-| BTC futures basis | Deribit quarterly futures (proxy) |
+| BTC futures basis | Deribit quarterly futures proxy |
 | BTC implied volatility | Deribit volatility index |
-| CME BTC futures open interest | Yahoo Finance metadata (BTC=F) |
-| BTC perpetual funding | Binance perpetuals (leveraged-demand proxy) |
-| Coinbase Prime positioning | Claude web search agent over Coinbase Institutional pages |
+| CME BTC futures open interest | Yahoo Finance metadata for `BTC=F` |
+| BTC perpetual funding | Binance perpetuals as a leveraged-demand proxy |
+| Institutional positioning | Claude web search over public institutional pages |
 
-If any source is unreachable, the relevant agent falls back to a clearly labeled local placeholder so the pipeline still produces an editable output.
+If a source is unreachable, the relevant agent falls back to a clearly labeled local placeholder so the pipeline still produces an editable output.
 
-## Concepts the pipeline demonstrates
+## Responsible Use
+
+This project is for research workflow demonstration and education. It is not financial advice, not a live trading system, and not a substitute for human diligence.
+
+Good use:
+
+- generate a first-pass research brief
+- compare market snapshots over time
+- practice institutional-style writing
+- test agent role separation and QA review
+- create a portfolio artifact around practical AI-assisted research
+
+Bad use:
+
+- trade directly from generated text
+- treat placeholder data as live market data
+- publish a memo without checking sources
+- remove the AI disclosure from generated output
+
+## Concepts Demonstrated
 
 - Multi-agent decomposition with hard role separation
-- Persistent snapshots in sqlite (the run is reproducible from the snapshot)
-- Hard word caps enforced at generation time, not edit time
-- QA as a separate agent with explicit grading criteria
-- AI disclosure on every output by default
-- Graceful degradation when an external data source is offline
-- Structured-output expectations from each agent (markdown sections with predictable shape)
+- Persistent snapshots in sqlite
+- Human-in-the-loop strategy research
+- Word-cap and structure enforcement before editing
+- QA as a separate review agent
+- AI disclosure by default
+- Graceful degradation when external sources are offline
+- Structured markdown outputs that can move into a Doc or memo
 
 ## Status
 
-- ✅ Pipeline runs end-to-end
-- ✅ All four agents working
-- ✅ QA agent scoring against six grading criteria
-- ✅ AI disclosure on output
-- ⏳ Actual submission answers held until after the June 1, 2026 deadline (then either redacted or added as `examples/`)
-
-## Submission self-rules
-
-The pipeline is *infrastructure*, not the submission. Rules I held myself to:
-
-1. Every fact in the submission must be human-verifiable against the snapshot in `data/market_data.db`.
-2. The QA agent's score is informational, not gating. A human must read the full draft.
-3. AI disclosure is mandatory on the submitted version, not optional.
-4. Word caps are enforced at the generation step; the editor only tightens.
+- Pipeline runs end to end
+- Four-agent workflow is implemented
+- QA agent scores drafts against explicit criteria
+- AI disclosure is included in generated output
+- Examples are redacted or held back where needed
 
 ## License
 
@@ -141,4 +186,4 @@ MIT. See [LICENSE](LICENSE).
 
 ## Contact
 
-cesalas13@gmail.com | linkedin.com/in/cesalas13 | github.com/cesalas13
+github.com/cesalas13

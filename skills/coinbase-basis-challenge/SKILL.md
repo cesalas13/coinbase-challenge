@@ -1,9 +1,9 @@
 ---
 name: coinbase-basis-challenge
-description: Generate commercially sharp answers for the Coinbase Institutional Client Strategy Challenge, with Bitcoin basis trade mechanics, Coinbase Prime positioning, institutional discovery, market context, and QA criteria.
+description: Generate commercially sharp institutional crypto strategy brief sections with Bitcoin basis-trade mechanics, Coinbase Prime positioning, institutional discovery, market context, and QA criteria.
 ---
 
-# Coinbase Institutional Client Strategy Challenge
+# Institutional Crypto Strategy Brief
 
 ## CRITICAL INSIGHTS (From Research)
 
@@ -36,15 +36,15 @@ Pull from market_data_agent at run time and interpret:
 - CME BTC futures open interest.
 - BTC perpetual funding.
 
-Use this skill to draft, critique, and refine a research submission for a Bitcoin basis-trade institutional challenge. Optimize for commercial judgment, client intuition, prioritization, questioning ability, market awareness, and structured thinking.
+Use this skill to draft, critique, and refine an institutional crypto strategy brief around Bitcoin basis-trade execution and client prioritization. Optimize for commercial judgment, client intuition, prioritization, questioning ability, market awareness, and structured thinking.
 
-## Exercise Constraints (calibrate per challenge brief)
+## Brief Section Constraints
 
-- Exercise 1: hard word cap. Compare a direct-execution route vs an ETF + listed-futures route for a sized cash-and-carry trade.
-- Exercise 2: hard word cap. Prioritize competing client/product demands.
-- Exercise 3: hard word cap. Ask high-signal discovery questions with brief rationale.
-- Exercise 4: hard word cap. Use the live market snapshot. Format each point as `[Data point]: [Implication for basis trade]`.
-- Total submission: under the brief's total cap. Leave room for an AI disclosure outside the main answer if allowed.
+- Section 1: hard word cap. Compare a direct-execution route vs an ETF + listed-futures route for a sized cash-and-carry trade.
+- Section 2: hard word cap. Prioritize competing client/product demands.
+- Section 3: hard word cap. Ask high-signal discovery questions with brief rationale.
+- Section 4: hard word cap. Use the live market snapshot. Format each point as `[Data point]: [Implication for basis trade]`.
+- Total brief: under the configured total cap. Leave room for an AI disclosure and source note outside the main answer.
 - Tone: commercial, precise, candid. Avoid fan language, generic institutional jargon, and unsupported claims.
 
 ## Basis Trade Mechanics

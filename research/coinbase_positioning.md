@@ -1,8 +1,8 @@
-<!-- Generated 2026-05-05T04:59:26+00:00 UTC -->
+<!-- Generated 2026-06-02T01:50:07+00:00 UTC -->
 
 # Coinbase Institutional Positioning
 
-Generated without live Claude web research. Verify before final submission.
+Generated without live Claude web research. Verify before final publication or use.
 
 ## Key Differentiators
 
@@ -13,7 +13,7 @@ Generated without live Claude web research. Verify before final submission.
 ## Agency-Only Message
 
 - Use agency-style language: Coinbase acts as an execution and infrastructure partner aligned with client outcomes, not a principal taking the other side of the client's trade.
-- Avoid overstating. If the answer references agency-only positioning, verify current public wording before submission.
+- Avoid overstating. If the brief references agency-only positioning, verify current public wording before publication or use.
 
 ## Integrated Platform Message
 

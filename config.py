@@ -1,4 +1,4 @@
-"""Configuration for the Coinbase challenge agents."""
+"""Configuration for the institutional crypto strategy research agents."""
 
 from __future__ import annotations
 
@@ -24,5 +24,4 @@ DERIBIT_VOL_URL = "https://www.deribit.com/api/v2/public/get_volatility_index_da
 YAHOO_CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
 GLASSNODE_CME_OI_URL = "https://api.glassnode.com/v1/metrics/derivatives/futures_cme_open_interest_sum"
 
-CHALLENGE_DUE = "2026-06-01 23:59 PST"
 MAX_WORDS_TOTAL = 1000

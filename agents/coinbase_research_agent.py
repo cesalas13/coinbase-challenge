@@ -17,13 +17,13 @@ Search the web for recent Coinbase Prime blog posts, product pages, institutiona
 - Recent product launches or platform expansions
 - Institutional client proof points or case studies
 
-Write a concise markdown positioning memo for a Coinbase Institutional Client Strategy Challenge answer. Be factual, cite source URLs inline where possible, and separate confirmed facts from inferred positioning.
+Write a concise markdown positioning memo for an institutional crypto strategy brief. Be factual, cite source URLs inline where possible, and separate confirmed facts from inferred positioning.
 """
 
 
 FALLBACK_POSITIONING = """# Coinbase Institutional Positioning
 
-Generated without live Claude web research. Verify before final submission.
+Generated without live Claude web research. Verify before final publication or use.
 
 ## Key Differentiators
 
@@ -34,7 +34,7 @@ Generated without live Claude web research. Verify before final submission.
 ## Agency-Only Message
 
 - Use agency-style language: Coinbase acts as an execution and infrastructure partner aligned with client outcomes, not a principal taking the other side of the client's trade.
-- Avoid overstating. If the answer references agency-only positioning, verify current public wording before submission.
+- Avoid overstating. If the brief references agency-only positioning, verify current public wording before publication or use.
 
 ## Integrated Platform Message
 

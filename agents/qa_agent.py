@@ -1,4 +1,4 @@
-"""QA scorer for the Coinbase challenge submission."""
+"""QA scorer for institutional crypto strategy briefs."""
 
 from __future__ import annotations
 
@@ -65,7 +65,7 @@ def _contains_any(text: str, terms: list[str]) -> list[str]:
     return [term for term in terms if term in lower]
 
 
-def qa_submission(text: str) -> QAResult:
+def qa_brief(text: str) -> QAResult:
     lower = text.lower()
     wc = count_words(text)
     flags: list[str] = []
@@ -74,12 +74,12 @@ def qa_submission(text: str) -> QAResult:
     scores = {criterion: 8 for criterion in CRITERIA}
 
     if wc >= MAX_WORDS_TOTAL:
-        flags.append(f"Submission exceeds {MAX_WORDS_TOTAL} words.")
+        flags.append(f"Brief exceeds {MAX_WORDS_TOTAL} words.")
         suggestions.append("Cut setup language and repeated Coinbase positioning until the answer is below the word cap.")
         for criterion in scores:
             scores[criterion] -= 1
     elif wc > 930:
-        flags.append("Submission is close to the total word cap.")
+        flags.append("Brief is close to the total word cap.")
         suggestions.append("Keep a 50-70 word buffer for formatting differences in Google Docs.")
 
     salesy = _contains_any(text, SALESY_TERMS)
@@ -107,7 +107,7 @@ def qa_submission(text: str) -> QAResult:
 
     if "unavailable" in lower:
         flags.append("One or more market data fields are unavailable.")
-        suggestions.append("Refresh the market data agent or manually verify CME OI/funding before final submission.")
+        suggestions.append("Refresh the market data agent or manually verify CME OI/funding before finalizing the brief.")
 
     if "$500m" not in lower and "$500M" not in text and "sovereign" not in lower:
         flags.append("Prioritization scenario lacks the sovereign-fund anchor.")
@@ -126,9 +126,9 @@ def qa_submission(text: str) -> QAResult:
         suggestions.append("Include spot, futures/basis, annualized basis, IV, and OI or a clear data caveat.")
         scores["Market Awareness"] -= 1
 
-    if not re.search(r"Exercise\s+1", text, re.IGNORECASE):
-        flags.append("Exercise headings are missing.")
-        suggestions.append("Use clear exercise headings for readability in the Google Doc.")
+    if not re.search(r"Section\s+1", text, re.IGNORECASE):
+        flags.append("Section headings are missing.")
+        suggestions.append("Use clear section headings for readability in the Google Doc.")
         scores["Structured Thinking"] -= 1
 
     scores = {criterion: max(1, min(10, score)) for criterion, score in scores.items()}
@@ -138,5 +138,5 @@ def qa_submission(text: str) -> QAResult:
 if __name__ == "__main__":
     import sys
 
-    submission = sys.stdin.read()
-    print(qa_submission(submission).to_markdown())
+    brief = sys.stdin.read()
+    print(qa_brief(brief).to_markdown())

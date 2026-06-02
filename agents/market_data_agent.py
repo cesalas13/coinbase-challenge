@@ -1,4 +1,4 @@
-"""Fetch and persist market data for the Coinbase challenge submission."""
+"""Fetch and persist market data for institutional crypto strategy briefs."""
 
 from __future__ import annotations
 
